@@ -6,6 +6,7 @@ services:
   php-apache-environment:
     # the container_name is a random name
     container_name: php-apache
+    # we need to build a container from the Dockerfile, which is here (counting the docker-compose.yml as a base starting point): 
     build:
       context: ./php
       dockerfile: Dockerfile
@@ -21,6 +22,7 @@ services:
       - 8000:80
   
   # DB SETUP
+  # so, we can connect Heidi too. See 'Connecting docker....png' for details.
   db:
     # the container_name is a random name
     container_name: db
@@ -36,9 +38,10 @@ services:
         - "9906:3306"
   
   # PHPMYADMIN SETUP
-  # username: root
-  # password: whatever is in the db/enviroment/MYSQL_ROOT_PASSWORD, which is ... MYSQL_ROOT_PASSWORD
-  # so, we can connect Heidi too. See 'Connecting docker....png' for details.
+  # username for the admi: root
+  # password for the admin: whatever is in the db/enviroment/MYSQL_ROOT_PASSWORD, which is ... MYSQL_ROOT_PASSWORD
+  # username for the app: MYSQL_USER
+  # password for the app: MYSQL_PASSWORD
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
