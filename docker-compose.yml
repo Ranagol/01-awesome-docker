@@ -1,0 +1,51 @@
+# below we select the Docker version that we want to use
+version: '3.8'
+services:
+
+  # APACHE SERVER SETUP
+  php-apache-environment:
+    # the container_name is a random name
+    container_name: php-apache
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    # PHP Apache also depends on the db service to connect to MySQL. We need to configure it by specifying a depends_on: environment.
+    depends_on:
+      - db
+    # The volume - this will set up your present working src directory for your code/source files. If you were to run a PHP script, that file would have to be in that directory.
+    volumes:
+      - ./php/src:/var/www/html/
+    # It will set up an Apache server port mapping to the port on your local computer. This means that we are setting up an Apache server to expose port 80. Port 8000 reaches out to the PHP scripts and executes them in a browser from within Docker containers.
+    ports:
+      # so, our app can be found here: http://localhost:8000/
+      - 8000:80
+  
+  # DB SETUP
+  db:
+    # the container_name is a random name
+    container_name: db
+    image: mysql
+    #  restarts the service whenever any defined configuration changes.
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+        MYSQL_DATABASE: MY_DATABASE
+        MYSQL_USER: MYSQL_USER
+        MYSQL_PASSWORD: MYSQL_PASSWORD
+    ports:
+        - "9906:3306"
+  
+  # PHPMYADMIN SETUP
+  # username: root
+  # password: whatever is in the db/enviroment/MYSQL_ROOT_PASSWORD, which is ... MYSQL_ROOT_PASSWORD
+  # so, we can connect Heidi too. See 'Connecting docker....png' for details.
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      # so, the phpadmin will be available to us on
+      - '8080:80'
+    restart: always
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
