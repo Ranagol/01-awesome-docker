@@ -15,7 +15,7 @@ services:
       - db
     # The volume - this will set up your present working src directory for your code/source files. If you were to run a PHP script, that file would have to be in that directory.
     volumes:
-      - ./php/src:/var/www/html/
+      - .:/var/www/html/
     # It will set up an Apache server port mapping to the port on your local computer. This means that we are setting up an Apache server to expose port 80. Port 8000 reaches out to the PHP scripts and executes them in a browser from within Docker containers.
     ports:
       # so, our app can be found here: http://localhost:8000/
